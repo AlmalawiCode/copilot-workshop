@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة Excel مع Copilot - اليوم الأول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a6b3a;
+            --primary-dark: #0d4524;
+            --accent: #7bed9f;
+            --accent-glow: rgba(123, 237, 159, 0.3);
+            --surface: #0a1f12;
+            --surface-light: #122a1a;
+            --text: #ffffff;
+            --text-muted: #a8c4b0;
+            --gradient-1: linear-gradient(135deg, #1a6b3a 0%, #2ecc71 50%, #27ae60 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--surface);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.8;
+            direction: rtl;
+        }
+
+        /* Background Grid */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(123, 237, 159, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(123, 237, 159, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -150px;
+            left: -150px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent);
+            bottom: -100px;
+            right: -100px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -30px); }
+            66% { transform: translate(-20px, 20px); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--text);
+        }
+
+        .day-badge {
+            display: inline-block;
+            background: var(--gradient-1);
+            padding: 8px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .header h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Workshop Steps */
+        .steps-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 50px 0 30px;
+            color: var(--accent);
+        }
+
+        .steps-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .step-card {
+            background: var(--surface-light);
+            border: 1px solid rgba(123, 237, 159, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-1);
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .step-card:hover {
+            transform: translateX(-10px);
+            border-color: rgba(123, 237, 159, 0.3);
+            box-shadow: 0 20px 60px rgba(26, 107, 58, 0.2);
+        }
+
+        .step-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .step-arrow {
+            font-size: 2rem;
+            color: var(--accent);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .step-card:hover .step-arrow {
+            opacity: 1;
+            transform: translateX(-10px);
+        }
+
+        /* Data File Section */
+        .data-section {
+            background: rgba(123, 237, 159, 0.05);
+            border: 1px solid rgba(123, 237, 159, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .data-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--gradient-1);
+            color: var(--text);
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(26, 107, 58, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .step-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="../index.html" class="back-link">
+                <span>→</span> العودة للصفحة الرئيسية
+            </a>
+            <div class="day-badge">اليوم الأول</div>
+            <h1>ورشة <span>Excel</span> مع Copilot</h1>
+            <p>تعلم كيف تستخدم الذكاء الاصطناعي لتحليل البيانات وإنشاء التقارير في Excel</p>
+        </header>
+
+        <!-- Steps -->
+        <h2 class="steps-title">خطوات الورشة</h2>
+
+        <div class="steps-grid">
+            <!-- Step 1: Survey -->
+            <a href="survey.html" class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>المقدمة والتحديات</h3>
+                    <p>تعرف على البيانات وفكر في كيفية حل التحديات بالطريقة التقليدية</p>
+                </div>
+                <span class="step-arrow">←</span>
+            </a>
+
+            <!-- Step 2: Workshop -->
+            <a href="workshop.html" class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>التطبيق العملي</h3>
+                    <p>14 تمرين عملي: 4 أوامر محادثة + 10 دوال COPILOT</p>
+                </div>
+                <span class="step-arrow">←</span>
+            </a>
+        </div>
+
+        <!-- Data File -->
+        <div class="data-section">
+            <h3>ملف البيانات للتطبيق</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">حمّل ملف Excel للعمل عليه خلال الورشة</p>
+            <a href="data-sales.xlsx" class="download-btn" download>
+                <span>📥</span>
+                تحميل data-sales.xlsx
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>كلية الحاسبات وتقنية المعلومات - جامعة الملك عبدالعزيز</p>
+            <p style="margin-top: 10px;">مع د. عبدالمحسن عفف المعلوي</p>
+        </footer>
+    </div>
+</body>
+</html>

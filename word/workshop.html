@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سيناريوهات الورشة - Word مع Copilot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a6b3a;
+            --primary-dark: #0d4524;
+            --accent: #7bed9f;
+            --accent-glow: rgba(123, 237, 159, 0.3);
+            --surface: #0a1f12;
+            --surface-light: #122a1a;
+            --text: #ffffff;
+            --text-muted: #a8c4b0;
+            --gradient-1: linear-gradient(135deg, #1a6b3a 0%, #2ecc71 50%, #27ae60 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--surface);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.8;
+            direction: rtl;
+        }
+
+        /* Background Grid */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(123, 237, 159, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(123, 237, 159, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -150px;
+            left: -150px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent);
+            bottom: -100px;
+            right: -100px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -30px); }
+            66% { transform: translate(-20px, 20px); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--text);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .header h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Scenarios Grid */
+        .scenarios-title {
+            text-align: center;
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin: 40px 0 30px;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .scenario-card {
+            background: var(--surface-light);
+            border: 1px solid rgba(123, 237, 159, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scenario-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-1);
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(123, 237, 159, 0.3);
+            box-shadow: 0 20px 60px rgba(26, 107, 58, 0.3);
+        }
+
+        .scenario-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .scenario-number {
+            display: inline-block;
+            background: var(--gradient-1);
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .scenario-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .scenario-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .scenario-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .scenario-time {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(123, 237, 159, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .scenario-arrow {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            font-size: 1.5rem;
+            color: var(--accent);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .scenario-card:hover .scenario-arrow {
+            opacity: 1;
+            transform: translateX(-10px);
+        }
+
+        /* Advanced Scenario */
+        .advanced-section {
+            margin-top: 50px;
+        }
+
+        .advanced-title {
+            text-align: center;
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        .advanced-card {
+            background: linear-gradient(135deg, var(--surface-light) 0%, rgba(26, 107, 58, 0.2) 100%);
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            padding: 40px;
+            text-decoration: none;
+            color: var(--text);
+            display: block;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advanced-card::after {
+            content: 'متقدم';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #f39c12 0%, #e74c3c 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .advanced-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 25px 70px rgba(26, 107, 58, 0.4);
+        }
+
+        .advanced-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .advanced-icon {
+            font-size: 4rem;
+            flex-shrink: 0;
+        }
+
+        .advanced-info h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .advanced-info p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .advanced-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .advanced-feature {
+            background: rgba(123, 237, 159, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        /* Data Files Section */
+        .data-section {
+            background: rgba(123, 237, 159, 0.05);
+            border: 1px solid rgba(123, 237, 159, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .data-section h3 {
+            text-align: center;
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+        }
+
+        .data-files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .data-file {
+            background: var(--surface-light);
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .data-file:hover {
+            border-color: var(--primary);
+            transform: translateX(-5px);
+        }
+
+        .data-file-icon {
+            font-size: 1.5rem;
+        }
+
+        .data-file-name {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .advanced-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .advanced-card::after {
+                top: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="index.html" class="back-link">
+                <span>→</span> العودة للمقدمة
+            </a>
+            <h1>سيناريوهات <span>الورشة</span></h1>
+            <p>6 سيناريوهات عملية لتعلم استخدام Copilot في Word</p>
+        </header>
+
+        <!-- Scenarios Grid -->
+        <h2 class="scenarios-title">اختر السيناريو للبدء</h2>
+
+        <div class="scenarios-grid">
+            <!-- Scenario 1 -->
+            <a href="scenario-01.html" class="scenario-card">
+                <div class="scenario-number">1</div>
+                <div class="scenario-icon">📄</div>
+                <h3>كتابة خطاب طلب إجازة</h3>
+                <p>تحويل بيانات بسيطة إلى خطاب رسمي احترافي جاهز للتوقيع</p>
+                <div class="scenario-time">
+                    <span>⏱️</span>
+                    <span>30 دقيقة ← 3 دقائق</span>
+                </div>
+                <span class="scenario-arrow">←</span>
+            </a>
+
+            <!-- Scenario 2 -->
+            <a href="scenario-02.html" class="scenario-card">
+                <div class="scenario-number">2</div>
+                <div class="scenario-icon">📝</div>
+                <h3>تحويل ملاحظات إلى محضر اجتماع</h3>
+                <p>من ملاحظات سريعة وعشوائية إلى محضر رسمي منظم</p>
+                <div class="scenario-time">
+                    <span>⏱️</span>
+                    <span>45 دقيقة ← 10 دقائق</span>
+                </div>
+                <span class="scenario-arrow">←</span>
+            </a>
+
+            <!-- Scenario 3 -->
+            <a href="scenario-03.html" class="scenario-card">
+                <div class="scenario-number">3</div>
+                <div class="scenario-icon">📊</div>
+                <h3>تحويل ملاحظات إلى تقرير شهري</h3>
+                <p>من لهجة عامية وملاحظات عشوائية إلى تقرير رسمي احترافي</p>
+                <div class="scenario-time">
+                    <span>⏱️</span>
+                    <span>ساعتين ← 15 دقيقة</span>
+                </div>
+                <span class="scenario-arrow">←</span>
+            </a>
+
+            <!-- Scenario 4 -->
+            <a href="scenario-04.html" class="scenario-card">
+                <div class="scenario-number">4</div>
+                <div class="scenario-icon">💬</div>
+                <h3>صياغة رد مهني على استفسار</h3>
+                <p>ردود سريعة واحترافية على استفسارات الطلاب والعملاء</p>
+                <div class="scenario-time">
+                    <span>⏱️</span>
+                    <span>15 دقيقة ← 3 دقائق</span>
+                </div>
+                <span class="scenario-arrow">←</span>
+            </a>
+
+            <!-- Scenario 5 -->
+            <a href="scenario-05.html" class="scenario-card">
+                <div class="scenario-number">5</div>
+                <div class="scenario-icon">📢</div>
+                <h3>كتابة إعلان بصيغ متعددة</h3>
+                <p>إعلان واحد بـ 3 صيغ مختلفة: رسمي، سوشيال ميديا، مطبوع</p>
+                <div class="scenario-time">
+                    <span>⏱️</span>
+                    <span>30 دقيقة ← 5 دقائق</span>
+                </div>
+                <span class="scenario-arrow">←</span>
+            </a>
+        </div>
+
+        <!-- Advanced Scenario -->
+        <section class="advanced-section">
+            <h2 class="advanced-title">السيناريو المتقدم</h2>
+            <a href="scenario-06.html" class="advanced-card">
+                <div class="advanced-content">
+                    <div class="advanced-icon">🎓</div>
+                    <div class="advanced-info">
+                        <h3>تحليل درجات الطلاب - 15 تمرين</h3>
+                        <p>
+                            سيناريو متقدم ومعقد يتضمن تحليل بيانات الطلاب، إنشاء تقارير للعميد،
+                            كتابة خطابات تهنئة وإنذارات، وملخصات تنفيذية. يغطي جميع مهارات Copilot المتقدمة.
+                        </p>
+                        <div class="advanced-features">
+                            <span class="advanced-feature">📈 تحليل وإحصاء</span>
+                            <span class="advanced-feature">📝 إنشاء تقارير</span>
+                            <span class="advanced-feature">✉️ خطابات رسمية</span>
+                            <span class="advanced-feature">📋 ملخصات ومقارنات</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </section>
+
+        <!-- Data Files -->
+        <section class="data-section">
+            <h3>ملفات البيانات للتطبيق</h3>
+            <div class="data-files-grid">
+                <a href="data-01.docx" class="data-file" download>
+                    <span class="data-file-icon">📁</span>
+                    <span class="data-file-name">data-01.docx</span>
+                </a>
+                <a href="data-02.docx" class="data-file" download>
+                    <span class="data-file-icon">📁</span>
+                    <span class="data-file-name">data-02.docx</span>
+                </a>
+                <a href="data-03.docx" class="data-file" download>
+                    <span class="data-file-icon">📁</span>
+                    <span class="data-file-name">data-03.docx</span>
+                </a>
+                <a href="data-04.docx" class="data-file" download>
+                    <span class="data-file-icon">📁</span>
+                    <span class="data-file-name">data-04.docx</span>
+                </a>
+                <a href="data-05.docx" class="data-file" download>
+                    <span class="data-file-icon">📁</span>
+                    <span class="data-file-name">data-05.docx</span>
+                </a>
+                <a href="data-06.docx" class="data-file" download>
+                    <span class="data-file-icon">📁</span>
+                    <span class="data-file-name">data-06.docx (السيناريو المتقدم)</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>كلية الحاسبات وتقنية المعلومات - جامعة الملك عبدالعزيز</p>
+            <p style="margin-top: 10px;">مع د. عبدالمحسن عفف المعلوي</p>
+        </footer>
+    </div>
+</body>
+</html>

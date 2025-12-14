@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>السيناريو 2 - تعليمات تحويل ملاحظات إلى محضر اجتماع</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0a1f12 0%, #122a1a 50%, #1a6b3a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a6b3a 0%, #2ecc71 50%, #27ae60 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        .header .subtitle { opacity: 0.9; font-size: 1.1em; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+        .content { padding: 30px; }
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f8f9fa;
+        }
+        .section-title {
+            color: #1a6b3a;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .steps-list {
+            list-style: none;
+            counter-reset: steps;
+        }
+        .steps-list li {
+            counter-increment: steps;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .steps-list li::before {
+            content: counter(steps);
+            background: linear-gradient(135deg, #1a6b3a 0%, #2ecc71 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .prompt-box {
+            background: #0a1f12;
+            border-radius: 15px;
+            padding: 25px;
+            padding-bottom: 70px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .prompt-box h3 {
+            color: #7bed9f;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .prompt-text {
+            background: #122a1a;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 1.9;
+            border-right: 4px solid #7bed9f;
+        }
+        .copy-btn {
+            background: #1a6b3a;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .copy-btn:hover { background: #2ecc71; }
+        .tip-box {
+            background: linear-gradient(135deg, #d5f5e3 0%, #a8e6cf 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .tip-box h4 {
+            color: #1a6b3a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .time-save {
+            background: linear-gradient(135deg, #a8e6cf 0%, #7bed9f 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .time-save .big { font-size: 1.8em; color: #0d4524; font-weight: bold; }
+        .file-reference {
+            background: #d5f5e3;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-right: 4px solid #1a6b3a;
+            margin: 15px 0;
+        }
+        .file-reference strong { color: #0d4524; }
+        .output-preview {
+            background: #fafafa;
+            border: 2px dashed #1a6b3a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        .output-preview h4 { color: #1a6b3a; margin-bottom: 10px; }
+        .output-preview ul { margin-right: 20px; color: #555; }
+        .output-preview li { padding: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="workshop.html" style="display: inline-flex; align-items: center; gap: 8px; color: #7bed9f; text-decoration: none; font-size: 1rem; margin-bottom: 20px; padding: 10px 0;">
+            <span>→</span> العودة للسيناريوهات
+        </a>
+        <div class="header">
+            <h1>السيناريو 2: تحويل ملاحظات إلى محضر اجتماع</h1>
+            <p class="subtitle">من ملاحظات سريعة إلى محضر رسمي منظم</p>
+            <span class="badge">⏱️ توفير: 45 دقيقة ← 10 دقائق</span>
+        </div>
+
+        <div class="content">
+            <div class="file-reference" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <span><strong>📁 ملف البيانات:</strong> data-02.docx</span>
+                <a href="data-02.docx" download style="background: linear-gradient(135deg, #1a6b3a 0%, #2ecc71 100%); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;">
+                    <span>📥</span> تحميل الملف
+                </a>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📋 خطوات التنفيذ</h2>
+                <ol class="steps-list">
+                    <li>افتح الملف <strong>data-02.docx</strong> في Microsoft Word</li>
+                    <li>لاحظ أن الملاحظات مكتوبة بشكل عشوائي وغير منظم</li>
+                    <li>افتح Copilot (Alt + I)</li>
+                    <li>انسخ الأمر من الأسفل والصقه في Copilot</li>
+                    <li>اضغط Enter وانتظر النتيجة</li>
+                    <li>راجع المحضر الناتج وتأكد من صحة المعلومات</li>
+                    <li>قم بالتعديلات النهائية إذا لزم الأمر</li>
+                </ol>
+            </div>
+
+            <div class="prompt-box">
+                <h3>💻 الأمر لـ Copilot (انسخه):</h3>
+                <div class="prompt-text">
+أنشئ مستنداً جديداً يحتوي على محضر اجتماع رسمي من هذه الملاحظات يتضمن:
+
+1. ترويسة المحضر (اسم اللجنة، رقم الاجتماع، التاريخ، المكان)
+2. قائمة الحضور والغياب في جدول
+3. جدول الأعمال
+4. ملخص المناقشات لكل بند
+5. القرارات المتخذة (مرقمة)
+6. جدول المهام يوضح: المهمة | المسؤول | الموعد النهائي
+7. موعد الاجتماع القادم
+8. مكان للتوقيعات (رئيس اللجنة، أمين السر)
+
+مهم: اجعل المستند من اليمين لليسار (RTL)، واجعل التنسيق احترافياً وجميلاً يليق بمحاضر اللجان الجامعية مع جداول منسقة، ووفر رابط تحميل للمستند الجديد.
+                </div>
+                <button class="copy-btn" onclick="navigator.clipboard.writeText(document.querySelector('.prompt-text').innerText)">📋 نسخ الأمر</button>
+            </div>
+
+            <div class="time-save">
+                <div class="big">⏱️ من 45 دقيقة إلى 10 دقائق!</div>
+                <p>وفّر وقتك في التوثيق وركز على العمل المهم</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">✅ النتيجة المتوقعة</h2>
+                <div class="output-preview">
+                    <h4>المحضر سيتضمن:</h4>
+                    <ul>
+                        <li>ترويسة رسمية بمعلومات الاجتماع</li>
+                        <li>جدول بأسماء الحاضرين والغائبين</li>
+                        <li>بنود المناقشة مرتبة ومفصلة</li>
+                        <li>قائمة القرارات مرقمة</li>
+                        <li>جدول المهام بالمسؤولين والمواعيد</li>
+                        <li>مكان للتوقيعات</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h4>💡 نصائح إضافية:</h4>
+                <ul style="margin-right: 20px; margin-top: 10px;">
+                    <li>احتفظ بهذا الأمر لاستخدامه في جميع اجتماعاتك</li>
+                    <li>جرب: "أنشئ ملخصاً من 5 أسطر لإرساله بالبريد"</li>
+                    <li>جرب: "حوّل القرارات لتنسيق رسمي (قرار رقم 1/2024)"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
