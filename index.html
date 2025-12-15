@@ -504,6 +504,57 @@
             font-size: 1.2rem;
         }
 
+        /* QR Code Styles */
+        .workshop-qr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(123, 237, 159, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(123, 237, 159, 0.2);
+        }
+
+        .workshop-qr a {
+            display: block;
+            padding: 12px;
+            background: white;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .workshop-qr a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(123, 237, 159, 0.3);
+        }
+
+        .workshop-qr img {
+            width: 120px;
+            height: 120px;
+            display: block;
+        }
+
+        .workshop-qr .qr-label {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .workshop-date-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 8px 16px;
+            background: rgba(123, 237, 159, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -730,6 +781,18 @@
                             <li>دوال Copilot المتقدمة</li>
                             <li>تمارين عملية تطبيقية</li>
                         </ul>
+                        <div class="workshop-qr">
+                            <a href="https://eu.bbcollab.com/guest/9d738d9f7cd44ac2aef02fd7bc0ea980" target="_blank" onclick="event.stopPropagation();">
+                                <img src="qr_code_1.png" alt="QR Code Excel Workshop">
+                            </a>
+                            <span class="qr-label">امسح للانضمام للجلسة</span>
+                            <div class="workshop-date-info">
+                                <span>📅</span>
+                                <span>24-12-2025</span>
+                                <span>🌐</span>
+                                <span>أونلاين</span>
+                            </div>
+                        </div>
                         <button class="workshop-btn locked">
                             <span class="lock-icon">🔒</span>
                             <span>يُفتح يوم الورشة</span>
@@ -751,6 +814,18 @@
                             <li>صيغ متعددة لقنوات مختلفة</li>
                             <li>تمارين متقدمة شاملة</li>
                         </ul>
+                        <div class="workshop-qr">
+                            <a href="https://eu.bbcollab.com/guest/15b83eedc38d41d2889d3ef8774c0998" target="_blank" onclick="event.stopPropagation();">
+                                <img src="qr_code_2.png" alt="QR Code Word Workshop">
+                            </a>
+                            <span class="qr-label">امسح للانضمام للجلسة</span>
+                            <div class="workshop-date-info">
+                                <span>📅</span>
+                                <span>25-12-2025</span>
+                                <span>🌐</span>
+                                <span>أونلاين</span>
+                            </div>
+                        </div>
                         <button class="workshop-btn locked">
                             <span class="lock-icon">🔒</span>
                             <span>يُفتح يوم الورشة</span>
