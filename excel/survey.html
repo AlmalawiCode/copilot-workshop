@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقدمة ورشة العمل - الذكاء الاصطناعي في Excel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a6b3a;
+            --primary-light: #2ecc71;
+            --primary-dark: #0d4524;
+            --secondary: #27ae60;
+            --accent: #7bed9f;
+            --purple: #1a6b3a;
+            --bg-gradient: linear-gradient(135deg, #0a1f12 0%, #122a1a 50%, #1a6b3a 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #1a1a2e;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.8;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Section Title */
+        .section-title {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin: 30px 0 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2.5rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .section-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Data Table */
+        .data-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-bottom: 40px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 1200px;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 700;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            white-space: nowrap;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .data-table tr:hover {
+            background: #e8f5e9;
+        }
+
+        .rating-star {
+            color: #ffc107;
+        }
+
+        .status-returned {
+            background: #ffebee;
+            color: #c62828;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .status-processing {
+            background: #fff3e0;
+            color: #ef6c00;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .status-not-returned {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .comment-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Challenges Section */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .challenge-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-right: 5px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .challenge-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .challenge-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--accent);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .challenge-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .challenge-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .challenge-question {
+            font-size: 1.3rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #eee;
+        }
+
+        .think-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--purple) 0%, #9d4edd 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        /* Timer Section */
+        .timer-section {
+            background: linear-gradient(135deg, var(--purple) 0%, #9d4edd 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin: 40px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .timer-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .timer-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .timer-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .timer-btn.start {
+            background: white;
+            color: var(--purple);
+        }
+
+        .timer-btn.reset {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .timer-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timer-display {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: #7bed9f; text-decoration: none; font-size: 1rem; margin-bottom: 20px; padding: 10px 0;">
+            <span>→</span> العودة للورشة
+        </a>
+        <!-- Header -->
+        <header class="header">
+            <div class="header-icon">📊</div>
+            <h1>ورشة عمل الذكاء الاصطناعي في Excel</h1>
+            <p>مقدمة تفاعلية - تخيل كيف يمكنك حل هذه التحديات!</p>
+        </header>
+
+        <!-- Data Section -->
+        <div class="section-title">
+            <span class="icon">📋</span>
+            <div>
+                <h2>بيانات المبيعات - عينة من 20 سجل</h2>
+                <p>هذه عينة من البيانات الحقيقية التي سنعمل عليها في الورشة</p>
+            </div>
+        </div>
+
+        <div class="data-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>التاريخ</th>
+                        <th>المنتج</th>
+                        <th>الكمية</th>
+                        <th>سعر الوحدة</th>
+                        <th>إجمالي المبيعات</th>
+                        <th>اسم العميل</th>
+                        <th>المدينة</th>
+                        <th>مندوب المبيعات</th>
+                        <th>طريقة الدفع</th>
+                        <th>تعليق العميل</th>
+                        <th>التقييم</th>
+                        <th>حالة الإرجاع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ORD-2024-00001</td>
+                        <td>2024-05-23</td>
+                        <td>هاتف سامسونج جالكسي</td>
+                        <td>8</td>
+                        <td>4,499</td>
+                        <td>35,992</td>
+                        <td>فاطمة الشمري</td>
+                        <td>القطيف</td>
+                        <td>عمر المطيري</td>
+                        <td>أبل باي</td>
+                        <td class="comment-cell">سأشتري منتجات أخرى من نفس الشركة</td>
+                        <td><span class="rating-star">★★★★★</span></td>
+                        <td><span class="status-processing">قيد المعالجة</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00002</td>
+                        <td>2024-10-04</td>
+                        <td>هاتف سامسونج جالكسي</td>
+                        <td>9</td>
+                        <td>199</td>
+                        <td>1,791</td>
+                        <td>فيصل السبيعي</td>
+                        <td>جازان</td>
+                        <td>عبدالله القحطاني</td>
+                        <td>أبل باي</td>
+                        <td class="comment-cell">الضمان شامل والدعم الفني متعاون</td>
+                        <td><span class="rating-star">★★★★★</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00003</td>
+                        <td>2024-02-24</td>
+                        <td>مكنسة روبوت</td>
+                        <td>2</td>
+                        <td>999</td>
+                        <td>1,998</td>
+                        <td>عبدالله الشمري</td>
+                        <td>تبوك</td>
+                        <td>هند العتيبي</td>
+                        <td>نقداً</td>
+                        <td class="comment-cell">خدمة توصيل سريعة والمنتج مطابق للوصف</td>
+                        <td><span class="rating-star">★★★★☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00004</td>
+                        <td>2024-08-22</td>
+                        <td>سماعة رأس سوني</td>
+                        <td>7</td>
+                        <td>999</td>
+                        <td>6,993</td>
+                        <td>سعود المطيري</td>
+                        <td>القطيف</td>
+                        <td>منى البلوي</td>
+                        <td>أبل باي</td>
+                        <td class="comment-cell">المنتج يعمل بشكل رائع وأداء ممتاز</td>
+                        <td><span class="rating-star">★★★★☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00005</td>
+                        <td>2024-02-16</td>
+                        <td>كاميرا نيكون</td>
+                        <td>8</td>
+                        <td>1,999</td>
+                        <td>15,992</td>
+                        <td>ريم الشهري</td>
+                        <td>الدمام</td>
+                        <td>فاطمة الحربي</td>
+                        <td>مدى</td>
+                        <td class="comment-cell">سأشتري منتجات أخرى من نفس الشركة</td>
+                        <td><span class="rating-star">★★★★★</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00006</td>
+                        <td>2024-11-13</td>
+                        <td>نظارة واقع افتراضي</td>
+                        <td>7</td>
+                        <td>1,999</td>
+                        <td>13,993</td>
+                        <td>عمر القحطاني</td>
+                        <td>نجران</td>
+                        <td>نورة الدوسري</td>
+                        <td>نقداً</td>
+                        <td class="comment-cell">التوصيل تأخر كثيراً عن الموعد المحدد</td>
+                        <td><span class="rating-star">★☆☆☆☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00007</td>
+                        <td>2024-04-28</td>
+                        <td>سماعة قيمنق</td>
+                        <td>10</td>
+                        <td>1,999</td>
+                        <td>19,990</td>
+                        <td>أحمد العتيبي</td>
+                        <td>حائل</td>
+                        <td>ريم الزهراني</td>
+                        <td>بطاقة ائتمان</td>
+                        <td class="comment-cell">خدمة توصيل سريعة والمنتج مطابق للوصف</td>
+                        <td><span class="rating-star">★★★★☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00008</td>
+                        <td>2024-01-03</td>
+                        <td>جهاز لوحي آيباد</td>
+                        <td>3</td>
+                        <td>4,499</td>
+                        <td>13,497</td>
+                        <td>فيصل الشمري</td>
+                        <td>الرياض</td>
+                        <td>ريم الزهراني</td>
+                        <td>أقساط</td>
+                        <td class="comment-cell">صوت المنتج مزعج جداً</td>
+                        <td><span class="rating-star">★☆☆☆☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00009</td>
+                        <td>2024-03-06</td>
+                        <td>لوحة مفاتيح لاسلكية</td>
+                        <td>5</td>
+                        <td>199</td>
+                        <td>995</td>
+                        <td>سلمان القحطاني</td>
+                        <td>أبها</td>
+                        <td>نورة الدوسري</td>
+                        <td>بطاقة ائتمان</td>
+                        <td class="comment-cell">منتج ممتاز وجودة عالية، أنصح به بشدة</td>
+                        <td><span class="rating-star">★★★★★</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00010</td>
+                        <td>2024-04-11</td>
+                        <td>ثلاجة توشيبا</td>
+                        <td>5</td>
+                        <td>2,999</td>
+                        <td>14,995</td>
+                        <td>سلمان الحربي</td>
+                        <td>نجران</td>
+                        <td>محمد الغامدي</td>
+                        <td>تحويل بنكي</td>
+                        <td class="comment-cell">خدمة توصيل سريعة والمنتج مطابق للوصف</td>
+                        <td><span class="rating-star">★★★★☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00011</td>
+                        <td>2024-05-05</td>
+                        <td>سماعة قيمنق</td>
+                        <td>1</td>
+                        <td>299</td>
+                        <td>299</td>
+                        <td>فيصل الدوسري</td>
+                        <td>الدمام</td>
+                        <td>فاطمة الحربي</td>
+                        <td>أقساط</td>
+                        <td class="comment-cell">منتج عادي، لا أكثر ولا أقل</td>
+                        <td><span class="rating-star">★★★☆☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00012</td>
+                        <td>2024-03-29</td>
+                        <td>جهاز لوحي سامسونج</td>
+                        <td>1</td>
+                        <td>199</td>
+                        <td>199</td>
+                        <td>سلمان القحطاني</td>
+                        <td>الدمام</td>
+                        <td>خالد العمري</td>
+                        <td>أقساط</td>
+                        <td class="comment-cell">المنتج مختلف عن الصورة المعروضة</td>
+                        <td><span class="rating-star">★★☆☆☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00013</td>
+                        <td>2024-05-04</td>
+                        <td>مكيف هواء سبليت</td>
+                        <td>1</td>
+                        <td>1,999</td>
+                        <td>1,999</td>
+                        <td>سلمان الغامدي</td>
+                        <td>نجران</td>
+                        <td>أحمد محمد</td>
+                        <td>مدى</td>
+                        <td class="comment-cell">سهل الاستخدام ويأتي مع دليل واضح</td>
+                        <td><span class="rating-star">★★★★★</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00014</td>
+                        <td>2024-03-27</td>
+                        <td>هاتف هواوي</td>
+                        <td>7</td>
+                        <td>99</td>
+                        <td>693</td>
+                        <td>دانة الغامدي</td>
+                        <td>المدينة المنورة</td>
+                        <td>خالد العمري</td>
+                        <td>نقداً</td>
+                        <td class="comment-cell">أفضل شراء قمت به هذا العام</td>
+                        <td><span class="rating-star">★★★★☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00015</td>
+                        <td>2024-01-05</td>
+                        <td>سماعة رأس سوني</td>
+                        <td>7</td>
+                        <td>2,499</td>
+                        <td>17,493</td>
+                        <td>ريم المطيري</td>
+                        <td>بريدة</td>
+                        <td>خالد العمري</td>
+                        <td>أقساط</td>
+                        <td class="comment-cell">بعض المميزات جيدة وبعضها يحتاج تحسين</td>
+                        <td><span class="rating-star">★★★☆☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00016</td>
+                        <td>2024-12-01</td>
+                        <td>جهاز لوحي آيباد</td>
+                        <td>10</td>
+                        <td>3,999</td>
+                        <td>39,990</td>
+                        <td>محمد الشمري</td>
+                        <td>نجران</td>
+                        <td>خالد العمري</td>
+                        <td>نقداً</td>
+                        <td class="comment-cell">خدمة توصيل سريعة والمنتج مطابق للوصف</td>
+                        <td><span class="rating-star">★★★★★</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00017</td>
+                        <td>2024-09-25</td>
+                        <td>هاتف هواوي</td>
+                        <td>1</td>
+                        <td>199</td>
+                        <td>199</td>
+                        <td>فاطمة الشمري</td>
+                        <td>الطائف</td>
+                        <td>سلطان الشهري</td>
+                        <td>نقداً</td>
+                        <td class="comment-cell">التصميم عادي لكن الأداء معقول</td>
+                        <td><span class="rating-star">★★★☆☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00018</td>
+                        <td>2024-06-24</td>
+                        <td>لابتوب HP</td>
+                        <td>7</td>
+                        <td>1,999</td>
+                        <td>13,993</td>
+                        <td>هند الشهري</td>
+                        <td>حائل</td>
+                        <td>ريم الزهراني</td>
+                        <td>أبل باي</td>
+                        <td class="comment-cell">خدمة توصيل سريعة والمنتج مطابق للوصف</td>
+                        <td><span class="rating-star">★★★★☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00019</td>
+                        <td>2024-09-12</td>
+                        <td>مكنسة كهربائية</td>
+                        <td>2</td>
+                        <td>3,499</td>
+                        <td>6,998</td>
+                        <td>عمر الشهري</td>
+                        <td>الطائف</td>
+                        <td>محمد الغامدي</td>
+                        <td>مدى</td>
+                        <td class="comment-cell">التغليف كان سيئاً والمنتج وصل مكسوراً</td>
+                        <td><span class="rating-star">★★☆☆☆</span></td>
+                        <td><span class="status-returned">تم الإرجاع</span></td>
+                    </tr>
+                    <tr>
+                        <td>ORD-2024-00020</td>
+                        <td>2024-11-14</td>
+                        <td>سماعة قيمنق</td>
+                        <td>7</td>
+                        <td>1,499</td>
+                        <td>10,493</td>
+                        <td>عمر العتيبي</td>
+                        <td>القطيف</td>
+                        <td>منى البلوي</td>
+                        <td>مدى</td>
+                        <td class="comment-cell">سأشتري منتجات أخرى من نفس الشركة</td>
+                        <td><span class="rating-star">★★★★☆</span></td>
+                        <td><span class="status-not-returned">لم يُرجع</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Timer Section -->
+        <div class="timer-section">
+            <h3>⏱️ وقت التفكير</h3>
+            <p>خذ دقيقتين للتفكير في التحديات أدناه... كيف ستحلها في Excel التقليدي؟</p>
+            <div class="timer-display" id="timer">02:00</div>
+            <div class="timer-buttons">
+                <button class="timer-btn start" onclick="toggleTimer()">▶️ ابدأ</button>
+                <button class="timer-btn reset" onclick="resetTimer()">🔄 إعادة</button>
+            </div>
+        </div>
+
+        <!-- Challenges Section -->
+        <div class="section-title">
+            <span class="icon">🤔</span>
+            <div>
+                <h2>تخيل... كيف ستحل هذه التحديات؟</h2>
+                <p>انظر للبيانات أعلاه وفكر كيف يمكنك تنفيذ هذه المهام في Excel التقليدي</p>
+            </div>
+        </div>
+
+        <div class="challenges-grid">
+            <!-- Challenge 1 -->
+            <div class="challenge-card">
+                <span class="challenge-number">1</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">📊</div>
+                <div class="challenge-title">مديرك يريد عرض تقديمي سريع عن توزيع طرق الدفع المستخدمة</div>
+                <div class="challenge-question">كيف ستنشئ رسم بياني يوضح طريقة الدفع؟</div>
+            </div>
+
+            <!-- Challenge 2 -->
+            <div class="challenge-card">
+                <span class="challenge-number">2</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">🏙️</div>
+                <div class="challenge-title">تريد معرفة أي المدن تفضل طريقة دفع معينة...</div>
+                <div class="challenge-question">ما هي أعلى مدينة تستخدم مدى؟</div>
+            </div>
+
+            <!-- Challenge 3 -->
+            <div class="challenge-card">
+                <span class="challenge-number">3</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">🏆</div>
+                <div class="challenge-title">مديرك طلب منك تحديد أفضل موظف وكتابة خطاب تقدير له...</div>
+                <div class="challenge-question">كيف ستحدد أفضل مندوب مبيعات وتكتب خطاب شكر له؟</div>
+            </div>
+
+            <!-- Challenge 4 -->
+            <div class="challenge-card">
+                <span class="challenge-number">4</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">👩</div>
+                <div class="challenge-title">تحتاج استخراج بيانات العميلات الإناث... لكن انتبه! <strong style="color: #c62828;">لا يوجد عمود "الجنس" في البيانات!</strong></div>
+                <div class="challenge-question">كيف ستنشئ ملف يحتوي على الإناث فقط من أسمائهم؟</div>
+            </div>
+
+            <!-- Challenge 5 -->
+            <div class="challenge-card">
+                <span class="challenge-number">5</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">😊😐😠</div>
+                <div class="challenge-title">تريد فهم مشاعر العملاء من تعليقاتهم...</div>
+                <div class="challenge-question">كيف ستصنف كل تعليق إلى إيجابي، محايد، أو سلبي؟</div>
+            </div>
+
+            <!-- Challenge 6 -->
+            <div class="challenge-card">
+                <span class="challenge-number">6</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">🏷️</div>
+                <div class="challenge-title">لديك 72 منتج مختلف وتحتاج تصنيفها إلى 5 فئات فقط...</div>
+                <div class="challenge-question">كيف ستصنف جميع المنتجات تلقائياً؟</div>
+            </div>
+
+            <!-- Challenge 7 -->
+            <div class="challenge-card">
+                <span class="challenge-number">7</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">💳</div>
+                <div class="challenge-title">تريد مقارنة طرق الدفع بين الجنسين... <strong style="color: #c62828;">بدون عمود جنس!</strong></div>
+                <div class="challenge-question">كيف ستقارن طرق الدفع بين الذكور والإناث؟</div>
+            </div>
+
+            <!-- Challenge 8 -->
+            <div class="challenge-card">
+                <span class="challenge-number">8</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">📝</div>
+                <div class="challenge-title">الإدارة تريد خطة عمل لتحسين رضا العملاء...</div>
+                <div class="challenge-question">كيف ستنشئ خطة عمل من 3 نقاط مع الأولويات؟</div>
+            </div>
+
+            <!-- Challenge 9 -->
+            <div class="challenge-card">
+                <span class="challenge-number">9</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">🌐</div>
+                <div class="challenge-title">تحتاج جدول بجميع الجامعات السعودية مع تفاصيلها... <strong style="color: #00d4ff;">من الإنترنت مباشرة!</strong></div>
+                <div class="challenge-question">كيف ستبحث وتجمع وتنسق البيانات في جدول Excel؟</div>
+            </div>
+
+            <!-- Challenge 10 -->
+            <div class="challenge-card">
+                <span class="challenge-number">10</span>
+                <span class="think-badge">تخيل...</span>
+                <div class="challenge-icon">🎓</div>
+                <div class="challenge-title">تريد قائمة بكليات جامعة الملك عبدالعزيز ومواقعها...</div>
+                <div class="challenge-question">كيف ستجلب هذه البيانات من مصادر موثوقة تلقائياً؟</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🎯 في الورشة القادمة... سنرى كيف يحل Copilot كل هذه التحديات في ثوانٍ!</p>
+        </footer>
+    </div>
+
+    <script>
+        let timeLeft = 120; // 2 minutes
+        let timerInterval = null;
+        let isRunning = false;
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.querySelector('.timer-btn.start');
+            if (isRunning) {
+                clearInterval(timerInterval);
+                btn.textContent = '▶️ استمر';
+                isRunning = false;
+            } else {
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        document.getElementById('timer').textContent = '⏰ انتهى الوقت!';
+                        isRunning = false;
+                    }
+                }, 1000);
+                btn.textContent = '⏸️ إيقاف';
+                isRunning = true;
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 120;
+            updateDisplay();
+            document.querySelector('.timer-btn.start').textContent = '▶️ ابدأ';
+            isRunning = false;
+        }
+    </script>
+</body>
+</html>

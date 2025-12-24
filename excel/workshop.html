@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمارين Copilot في Excel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a6b3a;
+            --primary-light: #2ecc71;
+            --purple: #1a6b3a;
+            --accent: #7bed9f;
+            --blue: #27ae60;
+            --bg-dark: #0a1f12;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0a1f12 0%, #122a1a 50%, #1a6b3a 100%);
+            color: #fff;
+            line-height: 1.8;
+        }
+
+        /* Slide Mode */
+        .slide {
+            min-height: 100vh;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .slide-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-btn {
+            background: var(--purple);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: #9d4edd;
+            transform: scale(1.1);
+        }
+
+        .slide-indicator {
+            color: #aaa;
+            font-size: 0.95rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title-slide p {
+            font-size: 1.5rem;
+            color: #aaa;
+        }
+
+        .title-slide .badge {
+            display: inline-block;
+            background: var(--purple);
+            padding: 10px 25px;
+            border-radius: 30px;
+            margin-top: 30px;
+            font-size: 1.1rem;
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        /* Challenge Card */
+        .challenge {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .challenge-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .challenge-number {
+            background: linear-gradient(135deg, var(--purple), #9d4edd);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+        }
+
+        .challenge-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .challenge-desc {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+
+        /* Formula Box */
+        .formula-box {
+            background: #0d0d1a;
+            border-radius: 12px;
+            padding: 25px;
+            padding-bottom: 70px;
+            position: relative;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .formula-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #00ff88;
+            display: block;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .formula-box .func { color: #ff6b6b; }
+        .formula-box .string { color: #ffd93d; }
+        .formula-box .range { color: #00d4ff; }
+
+        .copy-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--purple);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+        }
+
+        .copy-btn:hover { background: #2ecc71; }
+
+        /* Columns Used */
+        .columns-used {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .col-tag {
+            background: rgba(123, 44, 191, 0.2);
+            border: 1px solid var(--purple);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+
+        .col-tag span {
+            color: #00d4ff;
+            font-weight: 700;
+        }
+
+        /* Info Boxes */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .info-card {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            text-align: center;
+        }
+
+        .info-card .icon { font-size: 2rem; margin-bottom: 10px; }
+        .info-card h4 { color: #00ff88; margin-bottom: 8px; }
+        .info-card p { color: #aaa; font-size: 0.95rem; }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.05));
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .warning-box h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .warning-quote {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border-right: 3px solid #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .warning-quote p { color: #ffd93d; font-style: italic; }
+        .warning-quote small { color: #aaa; }
+
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #888;
+            z-index: 1000;
+        }
+
+        .keyboard-hint kbd {
+            background: #333;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 0 3px;
+        }
+
+        /* Fullscreen button */
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide { padding: 20px; }
+            .title-slide h1 { font-size: 2rem; }
+            .section-header h2 { font-size: 1.8rem; }
+            .nav-bar { padding: 8px 15px; gap: 10px; }
+            .nav-btn { width: 40px; height: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Keyboard Hint -->
+    <div class="keyboard-hint">
+        <kbd>→</kbd> التالي | <kbd>←</kbd> السابق | <kbd>F</kbd> ملء الشاشة
+    </div>
+
+    <!-- Fullscreen Button -->
+    <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶</button>
+
+    <!-- Back Button -->
+    <a href="index.html" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: inline-flex; align-items: center; gap: 8px; color: #7bed9f; text-decoration: none; font-size: 1rem; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 25px; transition: all 0.3s;">
+        <span>→</span> العودة للورشة
+    </a>
+
+    <!-- Slide 1: Title -->
+    <div class="slide title-slide" id="slide-1">
+        <div class="slide-content">
+            <div style="font-size: 5rem; margin-bottom: 20px;">📊</div>
+            <h1>تمارين Copilot في Excel</h1>
+            <p>ورشة عمل الذكاء الاصطناعي في Excel</p>
+            <div class="badge">16 تمرين: 4 أوامر محادثة + 12 دالة COPILOT</div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Chat Section Header -->
+    <div class="slide" id="slide-2">
+        <div class="slide-content">
+            <div class="section-header">
+                <div style="font-size: 4rem; margin-bottom: 20px;">💬</div>
+                <h2 style="color: #00a4ef;">أوامر المحادثة مع Copilot</h2>
+                <p>اكتب هذه الأوامر مباشرة في نافذة Copilot Chat</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px;">
+                <div style="background: rgba(0, 120, 212, 0.1); padding: 20px; border-radius: 15px; border: 1px solid #0078d4;">
+                    <span style="color: #00a4ef; font-size: 1.5rem; font-weight: bold;">1</span>
+                    <p style="margin-top: 10px;">رسم بياني لطرق الدفع</p>
+                </div>
+                <div style="background: rgba(0, 120, 212, 0.1); padding: 20px; border-radius: 15px; border: 1px solid #0078d4;">
+                    <span style="color: #00a4ef; font-size: 1.5rem; font-weight: bold;">2</span>
+                    <p style="margin-top: 10px;">أعلى مدينة تستخدم مدى</p>
+                </div>
+                <div style="background: rgba(0, 120, 212, 0.1); padding: 20px; border-radius: 15px; border: 1px solid #0078d4;">
+                    <span style="color: #00a4ef; font-size: 1.5rem; font-weight: bold;">3</span>
+                    <p style="margin-top: 10px;">أفضل مندوب + خطاب شكر</p>
+                </div>
+                <div style="background: rgba(0, 120, 212, 0.1); padding: 20px; border-radius: 15px; border: 1px solid #0078d4;">
+                    <span style="color: #00a4ef; font-size: 1.5rem; font-weight: bold;">4</span>
+                    <p style="margin-top: 10px;">ملف العميلات الإناث</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Chat 1 -->
+    <div class="slide" id="slide-3">
+        <div class="slide-content">
+            <div class="challenge" style="border-right: 4px solid #0078d4;">
+                <div class="challenge-header">
+                    <span class="challenge-number" style="background: linear-gradient(135deg, #0078d4, #00a4ef);">1</span>
+                    <span class="challenge-title">إنشاء رسم بياني لطرق الدفع</span>
+                </div>
+                <div class="challenge-desc">
+                    اطلب من Copilot إنشاء رسم بياني يوضح توزيع طرق الدفع المستخدمة.
+                </div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code style="color: #00a4ef; font-size: 1.3rem;">ارسم مخططًا دائريًا يوضح توزيع طرق الدفع بناءً على القيم الموجودة في عمود Payment_Method</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Chat 2 -->
+    <div class="slide" id="slide-4">
+        <div class="slide-content">
+            <div class="challenge" style="border-right: 4px solid #0078d4;">
+                <div class="challenge-header">
+                    <span class="challenge-number" style="background: linear-gradient(135deg, #0078d4, #00a4ef);">2</span>
+                    <span class="challenge-title">معرفة المدينة الأكثر استخداماً لمدى</span>
+                </div>
+                <div class="challenge-desc">
+                    اكتشف أي المدن تفضل طريقة دفع معينة.
+                </div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code style="color: #00a4ef; font-size: 1.3rem;">ما هي أعلى مدينة تستخدم مدى</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Chat 3 -->
+    <div class="slide" id="slide-5">
+        <div class="slide-content">
+            <div class="challenge" style="border-right: 4px solid #0078d4;">
+                <div class="challenge-header">
+                    <span class="challenge-number" style="background: linear-gradient(135deg, #0078d4, #00a4ef);">3</span>
+                    <span class="challenge-title">تحديد أفضل مندوب وكتابة خطاب شكر</span>
+                </div>
+                <div class="challenge-desc">
+                    اطلب من Copilot تحديد أفضل موظف وكتابة خطاب تقدير له.
+                </div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code style="color: #00a4ef; font-size: 1.3rem;">اريد معرفة افضل مندوب مبيعات واريد تكتب خطاب شكر له</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Chat 4 -->
+    <div class="slide" id="slide-6">
+        <div class="slide-content">
+            <div class="challenge" style="border-right: 4px solid #0078d4;">
+                <div class="challenge-header">
+                    <span class="challenge-number" style="background: linear-gradient(135deg, #0078d4, #00a4ef);">4</span>
+                    <span class="challenge-title">استخراج بيانات العميلات الإناث</span>
+                </div>
+                <div class="challenge-desc">
+                    أنشئ ملف جديد يحتوي فقط على بيانات العميلات الإناث - <strong style="color: #ff6b6b;">بدون عمود جنس!</strong>
+                </div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code style="color: #00a4ef; font-size: 1.1rem;">أنشئ ملف Excel جديد باسم female_customers.xlsx يحتوي على جميع بيانات العملاء الإناث مع جميع الأعمدة</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: COPILOT Function Introduction -->
+    <div class="slide" id="slide-7">
+        <div class="slide-content">
+            <div class="section-header">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🤖</div>
+                <h2 style="color: #00ff88;">ما هي دالة COPILOT؟</h2>
+                <p>دالة جديدة من Microsoft تُدخل قوة الذكاء الاصطناعي مباشرة داخل خلايا Excel</p>
+            </div>
+
+            <div style="background: #0d0d1a; border-radius: 15px; padding: 30px; margin: 30px 0; border-right: 4px solid #00ff88;">
+                <h3 style="color: #00ff88; margin-bottom: 15px;">📝 الصيغة (Syntax)</h3>
+                <code style="font-family: 'Courier New', monospace; font-size: 1.4rem; color: #ffd93d; direction: ltr; display: block; text-align: left;">
+                    =COPILOT(<span style="color: #ff6b6b;">prompt</span>, [<span style="color: #00d4ff;">context</span>], [<span style="color: #ff6b6b;">prompt2</span>], [<span style="color: #00d4ff;">context2</span>], ...)
+                </code>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: rgba(255, 107, 107, 0.1); padding: 20px; border-radius: 12px; border: 1px solid #ff6b6b;">
+                    <strong style="color: #ff6b6b; font-size: 1.2rem;">prompt</strong>
+                    <p style="color: #aaa; margin-top: 8px;">النص الذي يصف المهمة أو السؤال</p>
+                </div>
+                <div style="background: rgba(0, 212, 255, 0.1); padding: 20px; border-radius: 12px; border: 1px solid #00d4ff;">
+                    <strong style="color: #00d4ff; font-size: 1.2rem;">context</strong>
+                    <p style="color: #aaa; margin-top: 8px;">مرجع الخلايا التي تحتوي البيانات</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Advantages -->
+    <div class="slide" id="slide-8">
+        <div class="slide-content">
+            <div class="section-header">
+                <h2 style="color: #00ff88;">✨ متى تستخدم دالة COPILOT؟</h2>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="icon">📊</div>
+                    <h4>تلخيص النصوص</h4>
+                    <p>تحويل مئات التعليقات إلى ملخص واضح</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon">🏷️</div>
+                    <h4>تصنيف البيانات</h4>
+                    <p>تصنيف المشاعر، الفئات، الأنماط تلقائياً</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon">💡</div>
+                    <h4>توليد الأفكار</h4>
+                    <p>عصف ذهني وإنشاء محتوى إبداعي</p>
+                </div>
+                <div class="info-card">
+                    <div class="icon">🔍</div>
+                    <h4>استخراج المعلومات</h4>
+                    <p>استنتاج بيانات غير موجودة (مثل الجنس من الاسم)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Warnings -->
+    <div class="slide" id="slide-9">
+        <div class="slide-content">
+            <div class="section-header">
+                <h2 style="color: #ff6b6b;">⚠️ تحذيرات مهمة من Microsoft</h2>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-quote">
+                    <p style="font-size: 1.3rem;">"COPILOT uses AI and can give incorrect responses"</p>
+                    <small>الدالة تستخدم الذكاء الاصطناعي وقد تعطي إجابات غير صحيحة</small>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div style="background: rgba(255, 107, 107, 0.1); padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #ff6b6b;">🔄 غير حتمية (Non-deterministic)</h4>
+                        <p style="color: #aaa; margin-top: 8px;">قد تعطي نتائج مختلفة في كل مرة</p>
+                    </div>
+                    <div style="background: rgba(255, 107, 107, 0.1); padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #ff6b6b;">📅 معرفة محدودة</h4>
+                        <p style="color: #aaa; margin-top: 8px;">معلومات النموذج محدودة لما قبل يونيو 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(255, 217, 61, 0.1); border: 1px solid #ffd93d; border-radius: 15px; padding: 25px; margin-top: 25px;">
+                <h3 style="color: #ffd93d; margin-bottom: 15px;">🚫 لا تستخدمها في:</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; color: #ccc;">
+                    <div>✗ الحسابات الرقمية (استخدم SUM, AVERAGE)</div>
+                    <div>✗ البحث في البيانات (استخدم XLOOKUP)</div>
+                    <div>✗ القرارات القانونية أو التنظيمية</div>
+                    <div>✗ المعلومات الفورية أو الحديثة</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Privacy + Sources -->
+    <div class="slide" id="slide-10">
+        <div class="slide-content">
+            <div style="background: rgba(0, 212, 255, 0.1); border-radius: 20px; padding: 40px; text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🔒</div>
+                <h2 style="color: #00d4ff; margin-bottom: 15px;">الخصوصية</h2>
+                <p style="color: #ccc; font-size: 1.3rem;">
+                    بياناتك المرسلة عبر دالة COPILOT<br>
+                    <strong style="color: #00ff88; font-size: 1.5rem;">لا تُستخدم أبداً</strong><br>
+                    لتدريب أو تحسين نماذج الذكاء الاصطناعي
+                </p>
+            </div>
+
+            <div style="text-align: center; color: #888;">
+                <p style="margin-bottom: 15px;">المصادر الرسمية:</p>
+                <a href="https://support.microsoft.com/en-us/office/copilot-function-5849821b-755d-4030-a38b-9e20be0cbf62" target="_blank" style="color: #00d4ff; margin: 0 15px;">Microsoft Support</a>
+                <a href="https://techcommunity.microsoft.com/blog/microsoft365insiderblog/bring-ai-to-your-formulas-with-the-copilot-function-in-excel/4443487" target="_blank" style="color: #00d4ff; margin: 0 15px;">Microsoft Tech Community</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Function Section Header -->
+    <div class="slide" id="slide-11">
+        <div class="slide-content">
+            <div class="section-header">
+                <div style="font-size: 4rem; margin-bottom: 20px;">📊</div>
+                <h2 style="color: #9d4edd;">دالة COPILOT في الخلايا</h2>
+                <p>اكتب هذه الصيغ في خلايا Excel</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 40px;">
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">5</span> تلخيص أنماط النوايا</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">6</span> تصنيف 5 فئات</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">7</span> تحديد الجنس من الاسم</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">8</span> رضا المنتجات بالجنس</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">9</span> تصنيف المشاعر</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">10</span> أسباب الشكاوى</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">11</span> طرق الدفع بالجنس</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">12</span> 3 مشاكل عاجلة</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">13</span> خطة عمل</div>
+                <div style="background: rgba(123, 44, 191, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #7b2cbf;"><span style="color: #9d4edd; font-weight: bold;">14</span> المنطقة لكل مدينة</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Function 5 -->
+    <div class="slide" id="slide-12">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">5</span>
+                    <span class="challenge-title">تلخيص أنماط نوايا العملاء</span>
+                </div>
+                <div class="challenge-desc">استخرج الأنماط الأكثر شيوعاً من تعليقات العملاء.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"لخص أنماط نوايا العملاء الأكثر شيوعاً من هذه التعليقات:"</span>; <span class="range">K2:K73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>K</span> - تعليقات العملاء</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Function 6 -->
+    <div class="slide" id="slide-13">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">6</span>
+                    <span class="challenge-title">تصنيف المنتجات إلى 5 فئات</span>
+                </div>
+                <div class="challenge-desc">صنف جميع المنتجات تلقائياً إلى 5 فئات رئيسية.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"حدد 5 أصناف لهذه المنتجات:"</span>; <span class="range">C2:C73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>C</span> - أسماء المنتجات</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Function 7 -->
+    <div class="slide" id="slide-14">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">7</span>
+                    <span class="challenge-title">تحديد جنس العملاء من أسمائهم</span>
+                </div>
+                <div class="challenge-desc">استنتج جنس كل عميل من اسمه العربي - <strong style="color: #ff6b6b;">بدون عمود جنس!</strong></div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"حدد جنس كل عميل من هذه الأسماء العربية. أرجع قائمة بـ (ذكر أو أنثى) لكل اسم:"</span>; <span class="range">G2:G73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>G</span> - أسماء العملاء</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Function 8 -->
+    <div class="slide" id="slide-15">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">8</span>
+                    <span class="challenge-title">مقارنة رضا المنتجات حسب الجنس</span>
+                </div>
+                <div class="challenge-desc">اكتشف أي المنتجات يفضلها الذكور وأيها تفضلها الإناث.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"ما المنتجات التي يرضى عنها الذكور أكثر؟ وما المنتجات التي ترضى عنها الإناث أكثر؟ الأسماء:"</span>; <span class="range">G2:G73</span>; <span class="string">"المنتجات:"</span>; <span class="range">C2:C73</span>; <span class="string">"التقييمات:"</span>; <span class="range">L2:L73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>G</span> - الأسماء</span>
+                    <span class="col-tag"><span>C</span> - المنتجات</span>
+                    <span class="col-tag"><span>L</span> - التقييمات</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: Function 9 -->
+    <div class="slide" id="slide-16">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">9</span>
+                    <span class="challenge-title">تصنيف مشاعر التعليقات</span>
+                </div>
+                <div class="challenge-desc">صنف كل تعليق إلى: إيجابي، محايد، أو سلبي.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"صنف مشاعر كل تعليق من هذه التعليقات إلى: إيجابي، محايد، أو سلبي. أرجع قائمة بالتصنيف لكل تعليق:"</span>; <span class="range">K2:K73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>K</span> - تعليقات العملاء</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17: Function 10 -->
+    <div class="slide" id="slide-17">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">10</span>
+                    <span class="challenge-title">تحليل أسباب الشكاوى</span>
+                </div>
+                <div class="challenge-desc">اكتشف أهم 5 أسباب للشكاوى من التعليقات السلبية.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"حلل التعليقات السلبية واذكر أهم 5 أسباب للشكاوى:"</span>; <span class="range">K2:K73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>K</span> - تعليقات العملاء</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Function 11 -->
+    <div class="slide" id="slide-18">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">11</span>
+                    <span class="challenge-title">مقارنة طرق الدفع حسب الجنس</span>
+                </div>
+                <div class="challenge-desc">قارن تفضيلات طرق الدفع بين الذكور والإناث.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"قارن طرق الدفع المفضلة بين الذكور والإناث:"</span>; <span class="range">G2:G73</span>; <span class="string">"طرق الدفع:"</span>; <span class="range">J2:J73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>G</span> - أسماء العملاء</span>
+                    <span class="col-tag"><span>J</span> - طرق الدفع</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 19: Function 12 -->
+    <div class="slide" id="slide-19">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">12</span>
+                    <span class="challenge-title">تحديد أهم 3 مشاكل عاجلة</span>
+                </div>
+                <div class="challenge-desc">حلل التعليقات والتقييمات لتحديد المشاكل التي تحتاج معالجة فورية.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"حلل هذه التعليقات والتقييمات واذكر أهم 3 مشاكل تحتاج معالجة عاجلة. التعليقات:"</span>; <span class="range">K2:K73</span>; <span class="string">"التقييمات:"</span>; <span class="range">L2:L73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>K</span> - التعليقات</span>
+                    <span class="col-tag"><span>L</span> - التقييمات</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 20: Function 13 -->
+    <div class="slide" id="slide-20">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">13</span>
+                    <span class="challenge-title">إنشاء خطة عمل مع الأولويات</span>
+                </div>
+                <div class="challenge-desc">أنشئ خطة عمل من 3 نقاط لتحسين رضا العملاء مع تحديد الأولوية.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"أنشئ خطة عمل من 3 نقاط مع الأولوية (عاجل/متوسط/منخفض) لتحسين رضا العملاء. التعليقات:"</span>; <span class="range">K2:K73</span>; <span class="string">"التقييمات:"</span>; <span class="range">L2:L73</span>; <span class="string">"حالات الإرجاع:"</span>; <span class="range">M2:M73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>K</span> - التعليقات</span>
+                    <span class="col-tag"><span>L</span> - التقييمات</span>
+                    <span class="col-tag"><span>M</span> - الإرجاع</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 21: Function 14 -->
+    <div class="slide" id="slide-21">
+        <div class="slide-content">
+            <div class="challenge">
+                <div class="challenge-header">
+                    <span class="challenge-number">14</span>
+                    <span class="challenge-title">تحديد المنطقة/الإمارة لكل مدينة</span>
+                </div>
+                <div class="challenge-desc">اعرض المنطقة أو الإمارة التي تتبع لها كل مدينة.</div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"اعرض المنطقة/الإمارة لكل مدينة"</span>; <span class="range">H2:H73</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag"><span>H</span> - المدن</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 22: New Section - Data Fetching -->
+    <div class="slide" id="slide-22">
+        <div class="slide-content">
+            <div class="section-header">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🌐</div>
+                <h2 style="color: #00d4ff;">جلب البيانات من الإنترنت</h2>
+                <p>قدرة جديدة ومذهلة لـ Copilot</p>
+            </div>
+
+            <div style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 20px; padding: 30px; margin: 30px 0;">
+                <h3 style="color: #00d4ff; margin-bottom: 20px; text-align: center;">💡 السيناريو التقليدي</h3>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; color: #aaa;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 2rem; margin-bottom: 8px;">🔍</div>
+                        <div>البحث في الإنترنت</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 2rem; margin-bottom: 8px;">📋</div>
+                        <div>نسخ البيانات</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 2rem; margin-bottom: 8px;">📊</div>
+                        <div>تنسيق الجدول</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 2rem; margin-bottom: 8px;">⏰</div>
+                        <div>وقت طويل!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1)); border: 2px solid #00ff88; border-radius: 20px; padding: 30px; text-align: center;">
+                <h3 style="color: #00ff88; margin-bottom: 15px;">✨ مع Copilot الآن</h3>
+                <p style="font-size: 1.3rem; color: #fff;">أمر واحد = <strong style="color: #00ff88;">بحث + جلب + تنسيق + جدول جاهز!</strong></p>
+                <p style="color: #aaa; margin-top: 15px;">Copilot يبحث في الإنترنت، يجمع البيانات من مصادر موثوقة، وينشئ جدولاً منسقاً مباشرة في Excel</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 23: Function 15 -->
+    <div class="slide" id="slide-23">
+        <div class="slide-content">
+            <div class="challenge" style="border-right: 4px solid #00d4ff;">
+                <div class="challenge-header">
+                    <span class="challenge-number" style="background: linear-gradient(135deg, #00d4ff, #0099cc);">15</span>
+                    <span class="challenge-title">جدول الجامعات السعودية</span>
+                </div>
+                <div class="challenge-desc">
+                    اطلب من Copilot البحث وإنشاء جدول شامل بجميع الجامعات في المملكة العربية السعودية مع تفاصيلها.
+                </div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"أنشئ جدولاً باسم Saudi_Universities بالأعمدة: الجامعة، النوع (حكومية/أهلية)، المدينة، المنطقة/الإمارة، الموقع الرسمي. املأ الجدول بقائمة جميع الجامعات في المملكة العربية السعودية من مصادر موثوقة."</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag" style="border-color: #00d4ff;"><span style="color: #00d4ff;">🌐</span> بيانات من الإنترنت</span>
+                    <span class="col-tag" style="border-color: #00d4ff;"><span style="color: #00d4ff;">📊</span> جدول منسق تلقائياً</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 24: Function 16 -->
+    <div class="slide" id="slide-24">
+        <div class="slide-content">
+            <div class="challenge" style="border-right: 4px solid #00d4ff;">
+                <div class="challenge-header">
+                    <span class="challenge-number" style="background: linear-gradient(135deg, #00d4ff, #0099cc);">16</span>
+                    <span class="challenge-title">جدول كليات جامعة الملك عبدالعزيز</span>
+                </div>
+                <div class="challenge-desc">
+                    اطلب من Copilot البحث وإنشاء جدول بجميع كليات جامعة الملك عبدالعزيز مع مواقعها وتفاصيلها.
+                </div>
+                <div class="formula-box">
+                    <button class="copy-btn" onclick="copyFormula(this)">نسخ</button>
+                    <code><span class="func">=COPILOT(</span><span class="string">"أنشئ جدولاً باسم KAU_Colleges بالأعمدة: الكلية، الموقع/الحرم (إن توفر)، ملاحظات. املأ الجدول بقائمة جميع كليات جامعة الملك عبدالعزيز من مصادر موثوقة."</span><span class="func">)</span></code>
+                </div>
+                <div class="columns-used">
+                    <span class="col-tag" style="border-color: #00d4ff;"><span style="color: #00d4ff;">🎓</span> بيانات أكاديمية</span>
+                    <span class="col-tag" style="border-color: #00d4ff;"><span style="color: #00d4ff;">🏛️</span> جامعة الملك عبدالعزيز</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 25: End -->
+    <div class="slide title-slide" id="slide-25">
+        <div class="slide-content">
+            <div style="font-size: 5rem; margin-bottom: 20px;">🎯</div>
+            <h1 style="font-size: 2.5rem;">شكراً لكم!</h1>
+            <p>الآن حان وقت التطبيق العملي</p>
+            <div class="badge" style="margin-top: 30px;">ورشة عمل الذكاء الاصطناعي في Excel</div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="prevSlide()">→</button>
+        <span class="slide-indicator"><span id="current-slide">1</span> / 25</span>
+        <button class="nav-btn" onclick="nextSlide()">←</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 25;
+
+        function goToSlide(n) {
+            if (n < 1) n = 1;
+            if (n > totalSlides) n = totalSlides;
+            currentSlide = n;
+            document.getElementById('slide-' + n).scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('current-slide').textContent = n;
+        }
+
+        function nextSlide() { goToSlide(currentSlide + 1); }
+        function prevSlide() { goToSlide(currentSlide - 1); }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullscreen();
+            }
+        });
+
+        // Update slide indicator on scroll
+        const slides = document.querySelectorAll('.slide');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    currentSlide = parseInt(id.replace('slide-', ''));
+                    document.getElementById('current-slide').textContent = currentSlide;
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Copy formula
+        function copyFormula(button) {
+            const code = button.parentElement.querySelector('code');
+            navigator.clipboard.writeText(code.textContent).then(() => {
+                button.textContent = 'تم النسخ!';
+                button.style.background = '#00d4ff';
+                setTimeout(() => {
+                    button.textContent = 'نسخ';
+                    button.style.background = '#7b2cbf';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
